@@ -68,7 +68,7 @@ export default class Schedule extends Component{
         <div className="schedule-panel">
           {this.state.blocks}
         </div>
-        <ProgressBar active bsStyle="danger" now={barPercent} label={`${barPercent}%`}/>
+        <ProgressBar active={barPercent < 100} striped bsStyle="danger" now={barPercent} label={`${barPercent}%`}/>
       </Panel>
     )
   }

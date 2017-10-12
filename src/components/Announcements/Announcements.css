@@ -28,6 +28,10 @@
   padding: 0 !important;
 }
 
+.announcement-title{
+  font-weight: bold;
+}
+
 .announcements-buttons-container{
   flex-grow: 1;
   display: flex;
