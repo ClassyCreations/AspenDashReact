@@ -156,7 +156,7 @@ class App extends Component {
             }
           </Row>
           {this.state.displayExceptions.announcements ?
-            <Announcements announcements={this.state.announcements} cycleTime={8000}/>
+            <Announcements announcements={this.state.announcements} displayButtons={this.state.displayExceptions.announcementsButtons} cycleTime={8000}/>
             :
             <div/>
           }

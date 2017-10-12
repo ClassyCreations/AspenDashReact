@@ -109,6 +109,10 @@ export default class Announcements extends Component{
   }
 
   render(){
+    let displayButtons = this.props.displayButtons;
+    if(typeof displayButtons === "undefined"){
+      displayButtons = true;
+    }
     let announcementIndex;
     if(typeof this.props.announcements !== 'undefined'){
       announcementIndex = `${this.state.announcementIndex+1}/${this.props.announcements.length}`
@@ -119,21 +123,25 @@ export default class Announcements extends Component{
       <div className="panel panel-danger announcements">
         <div className="panel-heading announcements-heading">
           <div className="panel-heading">Announcements <small className="announcements-index">{announcementIndex}</small></div>
-          <div className="announcements-buttons-container">
-            <div className="announcement-button arrow-icon" onClick={this.decrementAnnouncement}>
-              <i className="fa fa-arrow-left"></i>
+          {displayButtons?
+            <div className="announcements-buttons-container">
+              <div className="announcement-button arrow-icon" onClick={this.decrementAnnouncement}>
+                <i className="fa fa-arrow-left"></i>
+              </div>
+              <div className="announcement-button" onClick={this.togglePause}>
+                {this.state.paused ?
+                  <i className="fa fa-play" id="pause-button"></i>
+                  :
+                  <i className="fa fa-pause" id="pause-button"></i>
+                }
+              </div>
+              <div className="announcement-button arrow-icon" onClick={this.incrementAnnouncement}>
+                <i className="fa fa-arrow-right"></i>
+              </div>
             </div>
-            <div className="announcement-button" onClick={this.togglePause}>
-              {this.state.paused ?
-                <i className="fa fa-play" id="pause-button"></i>
-                :
-                <i className="fa fa-pause" id="pause-button"></i>
-              }
-            </div>
-            <div className="announcement-button arrow-icon" onClick={this.incrementAnnouncement}>
-              <i className="fa fa-arrow-right"></i>
-            </div>
-          </div>
+            :
+            <div/>
+          }
         </div>
         <div className="announcements-progress">
           <div className="announcements-progress-bar progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: this.state.barPercent+"%"}}></div>
