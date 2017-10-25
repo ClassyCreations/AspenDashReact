@@ -17,21 +17,23 @@ const tuesdayAdvisoryPercents = [
   86.78756476683938,
   100,
 ];
-const tuesdayAdvisoryClasses = [
-  'One End',
-  'Two Start',
-  'Two End',
-  'Three Start',
-  'Three End',
-  'Four Start',
-  'Four End',
-  'Five Start',
-  'Five End',
-  'Adv Start',
-  'Adv End',
-  'Six Start',
-  'Six End',
-];
+const tuesdayAdvisoryClasses = (blocks) => {
+  return [
+    blocks[0]+' End',
+    blocks[1]+' Start',
+    blocks[1]+' End',
+    blocks[2]+' Start',
+    blocks[2]+' End',
+    blocks[3]+' Start',
+    blocks[3]+' End',
+    blocks[4]+' Start',
+    blocks[4]+' End',
+    'Adv Start',
+    'Adv End',
+    blocks[5]+' Start',
+    blocks[5]+' End',
+  ];
+}
 
 //TODO: Second Lunch 11:20
 //TODO: Third Lunch 11:51
@@ -48,19 +50,21 @@ const regularDayPercents = [
   85.23316062176166,
   100,
 ];
-const regularDayClasses = [
-  'One End',
-  'Two Start',
-  'Two End',
-  'Three Start',
-  'Three End',
-  'Four Start',
-  'Four End',
-  'Five Start',
-  'Five End',
-  'Six Start',
-  'Six End',
-];
+const regularDayClasses = (blocks) => {
+  return [
+    blocks[0]+' End',
+    blocks[1]+' Start',
+    blocks[1]+' End',
+    blocks[2]+' Start',
+    blocks[2]+' End',
+    blocks[3]+' Start',
+    blocks[3]+' End',
+    blocks[4]+' Start',
+    blocks[4]+' End',
+    blocks[5]+' Start',
+    blocks[5]+' End',
+  ];
+}
 
 const thursdayAdvisoryPercents = [
   14.766839378238341,
@@ -77,21 +81,23 @@ const thursdayAdvisoryPercents = [
   86.78756476683938,
   100,
 ];
-const thursdayAdvisoryClasses = [
-'One End',
-  'Two Start',
-  'Two End',
-  'Adv Start',
-  'Adv End',
-  'Three Start',
-  'Three End',
-  'Four Start',
-  'Four End',
-  'Five Start',
-  'Five End',
-  'Six Start',
-  'Six End',
-];
+const thursdayAdvisoryClasses = (blocks) => {
+  return [
+    blocks[0]+' End',
+    blocks[1]+' Start',
+    blocks[1]+' End',
+    'Adv Start',
+    'Adv End',
+    blocks[2]+' Start',
+    blocks[2]+' End',
+    blocks[3]+' Start',
+    blocks[3]+' End',
+    blocks[4]+' Start',
+    blocks[4]+' End',
+    blocks[5]+' Start',
+    blocks[5]+' End',
+  ];
+}
 
 
 export default class BlockTimer extends Component{
@@ -102,12 +108,15 @@ export default class BlockTimer extends Component{
     this.startTimer = this.startTimer.bind(this);
   }
 
-  componentDidMount(){
-    this.startLoop();
-  }
-
   componentWillUnmount(){
     clearInterval(this.state.intervalIndex);
+  }
+
+  componentWillReceiveProps(){
+    setTimeout(() => {
+      clearInterval(this.state.intervalIndex);
+      this.startLoop();
+    }, 1);
   }
 
   getNumberIndex(array, number){
@@ -132,7 +141,7 @@ export default class BlockTimer extends Component{
     if(currentWeekDay === 2) {
       const blockNumber = this.getNumberIndex(tuesdayAdvisoryPercents, currentPercent);
       if(blockNumber !== false) {
-        nextEvent = tuesdayAdvisoryClasses[blockNumber];
+        nextEvent = tuesdayAdvisoryClasses(this.props.schedule)[blockNumber];
         nextPercent = tuesdayAdvisoryPercents[blockNumber];
       }else{
         nextEvent = "Start of School";
@@ -141,7 +150,7 @@ export default class BlockTimer extends Component{
     }else if(currentWeekDay === 4) {
       const blockNumber = this.getNumberIndex(thursdayAdvisoryPercents, currentPercent);
       if(blockNumber !== false) {
-        nextEvent = thursdayAdvisoryClasses[blockNumber];
+        nextEvent = thursdayAdvisoryClasses(this.props.schedule)[blockNumber];
         nextPercent = thursdayAdvisoryPercents[blockNumber];
       }else{
         nextEvent = "Start of School";
@@ -150,7 +159,7 @@ export default class BlockTimer extends Component{
     }else{
       const blockNumber = this.getNumberIndex(regularDayPercents, currentPercent);
       if(blockNumber !== false) {
-        nextEvent = regularDayClasses[blockNumber];
+        nextEvent = regularDayClasses(this.props.schedule)[blockNumber];
         nextPercent = regularDayPercents[blockNumber];
       }else{
         nextEvent = "Start of School";

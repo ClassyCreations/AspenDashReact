@@ -145,7 +145,7 @@ class App extends Component {
               <div/>
             }
             {this.state.displayExceptions.blockTimer ?
-              <BlockTimer size={size}/>
+              <BlockTimer schedule={this.state.schedule}  size={size}/>
               :
               <div/>
             }
