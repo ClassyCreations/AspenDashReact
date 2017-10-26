@@ -18,13 +18,16 @@ export default class Lunch extends Component{
 
   getLunchInfo(){
     request.get('https://cors-anywhere.herokuapp.com/melroseschools.nutrislice.com/menu/api/weeks/school/melrose/menu-type/lunch/'+new Date().getFullYear()+'/00/00/?format=json', (err, res, body) => {
-      body = JSON.parse(body);
-      //TODO: Fix when no internet
-      const item = body.days[new Date().getDay()].menu_items[1];
-      if(typeof item !== 'undefined'){
-        this.setState({special: item.food.name, loaded: true});
+      if(typeof body === 'undefined'){
+        this.setState({special: 'Error getting lunch'});
       }else{
-        this.setState({special: 'No Lunch Served'});
+        body = JSON.parse(body);
+        const item = body.days[new Date().getDay()].menu_items[1];
+        if(typeof item !== 'undefined'){
+          this.setState({special: item.food.name, loaded: true});
+        }else{
+          this.setState({special: 'No Lunch Served'});
+        }
       }
     })
   }
