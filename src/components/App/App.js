@@ -14,7 +14,6 @@ import { loadState, saveState } from '../../localstorage';
 
 import './App.css';
 
-
 class App extends Component {
   constructor(props){
     super(props);
