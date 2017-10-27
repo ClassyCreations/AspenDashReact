@@ -93,7 +93,7 @@ export default class BlockTimer extends Component{
     this.setState({timer: timeDiff});
     const interval = setInterval(() => {
       this.setState({timer: this.state.timer - 1});
-      if(this.state.timer < 0){
+      if(this.state.timer < 0 && (new Date()).getTime() < new Date().setHours(14, 11, 0, 0) && (new Date()).getTime() > new Date().setHours(7, 45, 0, 0)){
         this.props.refresh();
         clearInterval(interval);
         this.startLoop();
