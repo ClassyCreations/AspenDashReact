@@ -74,7 +74,6 @@ export default class Schedule extends Component{
 
   refresh(){
     //TODO: Potential large issue: In order to increase efficiency, refresh is only called when a block changes. Due to the update time, this may not actually change the current block
-    console.log("Schedule Refresh Called. New Props: ",this.props);
     this.startCounter();
     if(typeof this.props.schedule !== 'undefined'){
       setTimeout(() => {

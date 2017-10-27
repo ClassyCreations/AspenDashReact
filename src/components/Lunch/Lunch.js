@@ -16,7 +16,6 @@ export default class Lunch extends Component{
   }
 
   refresh(){
-    console.log("Lunch Refresh Called. New Props: ",this.props);
     //If a request has already been made today, don't make another one.
     const today = new Date();
     if(Math.round(Math.abs((this.state.oldDate.getTime() - today.getTime())/(86400000)))){

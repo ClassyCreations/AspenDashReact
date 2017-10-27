@@ -11,7 +11,6 @@ export default class DayTimer extends Component{
   }
 
   refresh(){
-    console.log('DayTimer Refresh Called. New props: ',this.props);
     clearInterval(this.state.intervalIndex);
     this.getTimeTillEnd();
   }

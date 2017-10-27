@@ -266,10 +266,8 @@ class App extends Component {
   }
 
   refresh(){
-    console.log("App Refresh Called. Getting new info...");
     this.getAspenInfo()
       .then(res => {
-        console.log("New Aspen Info: ",res);
         this.setState({aspenLoaded: true, asOf: res.asOf, schedule: res.schedule.blockSchedule, currentBlock: res.schedule.block, dayNumber: res.schedule.day, announcements: res.announcements.hs});
         if(typeof this.refs.scheduleChild !== 'undefined'){
           this.refs.scheduleChild.refresh();
