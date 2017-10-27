@@ -1,140 +1,22 @@
 import React, { Component } from 'react';
-import { Panel, Col} from 'react-bootstrap';
+import { Panel, Col } from 'react-bootstrap';
 import './BlockTimer.css'
-
-const tuesdayAdvisoryPercents = [
-  14.766839378238341, //Block 1 End
-  15.544041450777202, //Block 2 Start
-  29.015544041450774, //Block 2 End
-  29.792746113989637, //Block 3 Start
-  43.26424870466321,  //Block 3 End
-  43.26424870466321,  //Block 4 Start - Lunch 1 Start
-  48.96373056994819,  //Lunch 1 End
-  49.740932642487046, //Lunch 2 Start
-  55.44041450777202,  //Lunch 2 End
-  57.51295336787565,  //Lunch 3 Start
-  63.212435233160626, //Block 4 End - Lunch 3 End
-  63.98963730569949,  //Block 5 Start
-  77.46113989637306,  //Block 5 End
-  78.23834196891191,  //Adv Start
-  86.01036269430051,  //Adv End
-  86.78756476683938,  //Block 6 Start
-  100,                //Block 6 End
-];
-const tuesdayAdvisoryClasses = (blocks) => {
-  return [
-    blocks[0]+' End',
-    blocks[1]+' Start',
-    blocks[1]+' End',
-    blocks[2]+' Start',
-    blocks[2]+' End',
-    blocks[3]+' Start',
-    blocks[3]+' End',
-    blocks[4]+' Start - Lunch 1 Start',
-    blocks[4]+' - Lunch 1 End',
-    blocks[4]+' - Lunch 2 Start',
-    blocks[4]+' - Lunch 2 End',
-    blocks[4]+' - Lunch 3 Start',
-    blocks[4]+' End - Lunch 3 End',
-    'Adv Start',
-    'Adv End - '+blocks[5] + ' Start',
-    blocks[5]+' Start',
-    blocks[5]+' End',
-  ];
-}
-
-const regularDayPercents = [
-  16.06217616580311, //Block1End
-  16.83937823834197, //Block2Start
-  31.606217616580313,//Block2End
-  32.38341968911917, //Block3Start
-  47.15025906735752, //Block3End
-  47.66839378238342, //Block4Start - 1st lunch start
-  53.36787564766839, //First Lunch End
-  55.181347150259064,//Second Lunch Start
-  60.880829015544045,//Second Lunch End
-  63.212435233160626,//Third Lunch Start
-  68.9119170984456,  //Block4End - Third Lunch End
-  69.68911917098445, //Block5Start
-  84.4559585492228,  //Block5End
-  85.23316062176166, //Block6Start
-  100,               //Block6End
-];
-const regularDayClasses = (blocks) => {
-  return [
-    blocks[0]+' End',
-    blocks[1]+' Start',
-    blocks[1]+' End',
-    blocks[2]+' Start',
-    blocks[2]+' End',
-    blocks[3]+' Start - 1st lunch start',
-    blocks[3]+' - 1st lunch end',
-    blocks[3]+' - 2nd lunch start',
-    blocks[3]+' - 2nd lunch End',
-    blocks[3]+' - 1st lunch start',
-    blocks[3]+' End - 3rd lunch end',
-    blocks[4]+' Start',
-    blocks[4]+' End',
-    blocks[5]+' Start',
-    blocks[5]+' End',
-  ];
-};
-
-const thursdayAdvisoryPercents = [
-  14.766839378238341, //Block 1 End
-  15.544041450777202, //Block 2 Start
-  29.015544041450774, //Block 2 End
-  29.792746113989637, //Adv Start
-  37.56476683937824,  //Adv End
-  38.34196891191709,  //Block 3 Start
-  51.813471502590666, //Block 3 End
-  51.813471502590666, //Block 4 Start - Lunch 1 Start
-  57.51295336787565,  //Lunch 1 End
-  59.067357512953365, //Lunch 2 Start
-  64.76683937823834,  //Lunch 2 End
-  66.58031088082902,  //Lunch 3 Start
-  72.279792746114,    //Block 4 End - Lunch 3 End
-  73.05699481865285,  //Block 5 Start
-  86.01036269430051,  //Block 5 End
-  86.78756476683938,  //Block 6 Start
-  100,                //Block 6 End
-];
-const thursdayAdvisoryClasses = (blocks) => {
-  return [
-    blocks[0]+' End',
-    blocks[1]+' Start',
-    blocks[1]+' End',
-    'Adv Start',
-    'Adv End - '+blocks[2] + ' Start',
-    blocks[2]+' Start',
-    blocks[2]+' End',
-    blocks[3]+' Start - Lunch 1 Start',
-    blocks[3]+' - Lunch 1 End',
-    blocks[3]+' - Lunch 2 Start',
-    blocks[3]+' - Lunch 2 End',
-    blocks[3]+' - Lunch 3 Start',
-    blocks[3]+' End - Lunch 3 End',
-    blocks[4]+' Start',
-    blocks[4]+' End',
-    blocks[5]+' Start',
-    blocks[5]+' End',
-  ];
-};
-
 
 export default class BlockTimer extends Component{
   constructor(){
     super();
-    this.state = {currentPercent: 0, nextPercent: 0, nextEvent: '', timer: 0, intervalIndex: 0};
+    this.state = {currentPercent: 0, nextPercent: 0, nextEvent: 'Loading', timer: 0, intervalIndex: 0};
     this.startLoop = this.startLoop.bind(this);
     this.startTimer = this.startTimer.bind(this);
   }
 
   componentWillUnmount(){
+    //Get rid of any running functions before unmounting to avoid errors
     clearInterval(this.state.intervalIndex);
   }
 
   componentWillReceiveProps(){
+    //Wait to start the countdown until the schedule is received
     setTimeout(() => {
       clearInterval(this.state.intervalIndex);
       this.startLoop();
@@ -142,6 +24,7 @@ export default class BlockTimer extends Component{
   }
 
   getNumberIndex(array, number){
+    //Get the next number that is less than the current percent value
     array.forEach(number => {
       if(typeof number !== "number"){
         return false;
@@ -160,45 +43,50 @@ export default class BlockTimer extends Component{
     const currentPercent = ((new Date() - new Date().setHours(7, 45, 0, 0)) / (new Date().setHours(14, 11, 0, 0) - new Date().setHours(7, 45))) * 100;
     let nextEvent;
     let nextPercent;
+    const percents = this.props.percents;
+    const classes = this.props.classes;
+    //Each day corresponds to a schedule depending on which advisory there is
     if(currentWeekDay === 2) {
-      const blockNumber = this.getNumberIndex(tuesdayAdvisoryPercents, currentPercent);
+      const blockNumber = this.getNumberIndex(percents.tuesday, currentPercent);
       if(blockNumber !== false) {
-        nextEvent = tuesdayAdvisoryClasses(this.props.schedule)[blockNumber];
-        nextPercent = tuesdayAdvisoryPercents[blockNumber];
+        nextEvent = classes.tuesday(this.props.schedule)[blockNumber];
+        nextPercent = percents.tuesday[blockNumber];
       }else{
         nextEvent = "Start of School";
         nextPercent = 100;
       }
     }else if(currentWeekDay === 4) {
-      const blockNumber = this.getNumberIndex(thursdayAdvisoryPercents, currentPercent);
+      const blockNumber = this.getNumberIndex(percents.thursday, currentPercent);
       if(blockNumber !== false) {
-        nextEvent = thursdayAdvisoryClasses(this.props.schedule)[blockNumber];
-        nextPercent = thursdayAdvisoryPercents[blockNumber];
+        nextEvent = classes.thursday(this.props.schedule)[blockNumber];
+        nextPercent = percents.thursday[blockNumber];
       }else{
         nextEvent = "Start of School";
         nextPercent = 100;
       }
     }else{
-      const blockNumber = this.getNumberIndex(regularDayPercents, currentPercent);
+      const blockNumber = this.getNumberIndex(percents.regular, currentPercent);
       if(blockNumber !== false) {
-        nextEvent = regularDayClasses(this.props.schedule)[blockNumber];
-        nextPercent = regularDayPercents[blockNumber];
+        nextEvent = classes.regular(this.props.schedule)[blockNumber];
+        nextPercent = percents.regular[blockNumber];
       }else{
         nextEvent = "Start of School";
         nextPercent = 100;
       }
     }
-    if(nextPercent !== this.state.nextPercent) {
-      this.setState({
-        currentPercent: currentPercent,
-        nextPercent: nextPercent,
-        nextEvent: nextEvent
-      });
-      this.startTimer(currentPercent, nextPercent);
-    }
+    this.setState({
+      currentPercent: currentPercent,
+      nextPercent: nextPercent,
+      nextEvent: nextEvent
+    });
+    this.startTimer(currentPercent, nextPercent);
   }
 
   startTimer(current, next){
+    //Stop any current timer before starting a new one
+    clearInterval(this.state.intervalIndex);
+    //dayTime(length of the day in seconds) is multiplied by the difference between the current percent
+    //and next event percent in order to calculate the time until the next event
     const dayTime = (new Date().setHours(14, 11, 0, 0) - new Date().setHours(7, 45, 0, 0))/1000;
     const diff = next-current;
     const timeDiff = (diff/100)*dayTime;
@@ -206,6 +94,7 @@ export default class BlockTimer extends Component{
     const interval = setInterval(() => {
       this.setState({timer: this.state.timer - 1});
       if(this.state.timer < 0){
+        this.props.refresh();
         clearInterval(interval);
         this.startLoop();
       }

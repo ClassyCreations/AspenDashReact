@@ -6,21 +6,29 @@ import './Lunch.css';
 export default class Lunch extends Component{
   constructor(){
     super();
-    this.state = {special: 'Loading...', loaded: false};
+    this.state = {special: 'Loading...', loaded: false, oldDate: null};
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount(){
+    this.setState({oldDate: new Date()});
     this.getLunchInfo();
-    if(this.state.loaded !== true) {
-      setInterval(this.getLunchInfo(), 600000);
+  }
+
+  refresh(){
+    console.log("Lunch Refresh Called. New Props: ",this.props);
+    //If a request has already been made today, don't make another one.
+    const today = new Date();
+    if(Math.round(Math.abs((this.state.oldDate.getTime() - today.getTime())/(86400000)))){
+      this.setState({oldDate: today});
+      this.getLunchInfo();
     }
   }
 
   getLunchInfo(){
-    request.get('https://cors-anywhere.herokuapp.com/melroseschools.nutrislice.com/menu/api/weeks/school/melrose/menu-type/lunch/'+new Date().getFullYear()+'/00/00/?format=json', (err, res, body) => {
-      if(typeof body === 'undefined'){
-        this.setState({special: 'Error getting lunch'});
-      }else{
+    //TODO: Make this not stupid (Either save the nutrislice response and serve it ourselves or make some other way of this not being stupid)
+    request.get('https://melroseschools.nutrislice.com/menu/api/weeks/school/melrose/menu-type/lunch/'+new Date().getFullYear()+'/00/00/?format=json', (err, res, body) => {
+      try{
         body = JSON.parse(body);
         const item = body.days[new Date().getDay()].menu_items[1];
         if(typeof item !== 'undefined'){
@@ -28,6 +36,8 @@ export default class Lunch extends Component{
         }else{
           this.setState({special: 'No Lunch Served'});
         }
+      }catch(err){
+        this.setState({special: 'Error getting lunch'});
       }
     })
   }

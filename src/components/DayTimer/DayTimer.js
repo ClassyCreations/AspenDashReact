@@ -7,6 +7,13 @@ export default class DayTimer extends Component{
     super();
     this.state = {time: 0, intervalIndex: 0};
     this.getTimeTillEnd = this.getTimeTillEnd.bind(this);
+    this.refresh = this.refresh.bind(this);
+  }
+
+  refresh(){
+    console.log('DayTimer Refresh Called. New props: ',this.props);
+    clearInterval(this.state.intervalIndex);
+    this.getTimeTillEnd();
   }
 
   componentDidMount(){
@@ -53,7 +60,7 @@ export default class DayTimer extends Component{
       }else{
         this.setState({time: "School Out"});
       }
-    }, 1000)
+    }, 1000);
     this.setState({intervalIndex: interval});
   }
 
