@@ -104,7 +104,7 @@ class App extends Component {
       blocks[3]+' - 1st lunch end',
       blocks[3]+' - 2nd lunch start',
       blocks[3]+' - 2nd lunch End',
-      blocks[3]+' - 1st lunch start',
+      blocks[3]+' - 3rd lunch start',
       blocks[3]+' End - 3rd lunch end',
       blocks[4]+' Start',
       blocks[4]+' End',
