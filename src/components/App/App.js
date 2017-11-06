@@ -60,14 +60,14 @@ class App extends Component {
       blocks[1]+' End',
       blocks[2]+' Start',
       blocks[2]+' End',
-      blocks[3]+' Start',
-      blocks[3]+' End',
-      blocks[4]+' Start - Lunch 1 Start',
-      blocks[4]+' - Lunch 1 End',
-      blocks[4]+' - Lunch 2 Start',
-      blocks[4]+' - Lunch 2 End',
-      blocks[4]+' - Lunch 3 Start',
-      blocks[4]+' End - Lunch 3 End',
+      blocks[3]+' Start - Lunch 1 Start',
+      blocks[3]+' - Lunch 1 End',
+      blocks[3]+' - Lunch 2 Start',
+      blocks[3]+' - Lunch 2 End',
+      blocks[3]+' - Lunch 3 Start',
+      blocks[3]+' End - Lunch 3 End',
+      blocks[4]+' Start',
+      blocks[4]+' End',
       'Adv Start',
       'Adv End - '+blocks[5] + ' Start',
       blocks[5]+' Start',
@@ -278,6 +278,9 @@ class App extends Component {
         if(typeof this.refs.lunchChild !== 'undefined'){
           this.refs.lunchChild.refresh();
         }
+        if(typeof this.refs.blockTimerChild !== 'undefined'){
+          this.refs.blockTimerChild.refresh();
+        }
       });
   }
 
@@ -315,7 +318,7 @@ class App extends Component {
               <div/>
             }
             {this.state.displayExceptions.blockTimer ?
-              <BlockTimer classes={this.classes} percents={this.percents} refresh={this.refresh} schedule={this.state.schedule}  size={size}/>
+              <BlockTimer ref="blockTimerChild" classes={this.classes} percents={this.percents} refresh={this.refresh} schedule={this.state.schedule}  size={size}/>
               :
               <div/>
             }

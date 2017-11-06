@@ -103,6 +103,11 @@ export default class BlockTimer extends Component{
     this.setState({intervalIndex: interval});
   }
 
+  refresh(){
+    clearInterval(this.state.intervalIndex);
+    this.startLoop();
+  }
+
   timeToString(time){
     if(typeof time !== 'number'){
       return time;
