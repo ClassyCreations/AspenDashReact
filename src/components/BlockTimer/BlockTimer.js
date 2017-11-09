@@ -130,11 +130,15 @@ export default class BlockTimer extends Component{
 
   render(){
     return(
-      <Col sm={this.props.size}>
-        <Panel bsStyle="danger" header={this.state.nextEvent} className="block-timer-panel">
-          {this.timeToString(Math.round(this.state.timer))}
-        </Panel>
-      </Col>
+      this.props.hidden ?
+        <Col sm={this.props.size}>
+          <Panel bsStyle="danger" header={this.state.nextEvent} className="block-timer-panel">
+            {this.timeToString(Math.round(this.state.timer))}
+          </Panel>
+        </Col>
+        :
+        <div/>
+
     )
   }
 }

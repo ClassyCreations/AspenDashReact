@@ -65,11 +65,14 @@ export default class DayTimer extends Component{
 
   render(){
     return(
-      <Col sm={this.props.size}>
-        <Panel bsStyle="danger" header="End of Day" className="day-timer-panel">
-          {this.timeToString(this.state.time)}
-        </Panel>
-      </Col>
+      this.props.hidden ?
+        <Col sm={this.props.size}>
+          <Panel bsStyle="danger" header="End of Day" className="day-timer-panel">
+            {this.timeToString(this.state.time)}
+          </Panel>
+        </Col>
+        :
+        <div/>
     )
   }
 }

@@ -14,7 +14,10 @@ export default class Title extends Component{
       m = "";
     }
     return(
-      <PageHeader className="page-title">Day {this.props.dayNumber !== null ? `${this.props.dayNumber}'s ` : ' '}Information <small className="smallText">{m}</small></PageHeader>
+      this.props.hidden ?
+        <PageHeader className="page-title">Day {this.props.dayNumber !== null ? `${this.props.dayNumber}'s ` : ' '}Information <small className="smallText">{m}</small></PageHeader>
+        :
+        <div/>
     )
   }
 }

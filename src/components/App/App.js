@@ -93,7 +93,11 @@ class App extends Component {
     100,               //Block6End
   ];
   regularDayClasses = () => {
+    console.log(this.state.schedule);
     const blocks = this.state.schedule;
+    if(!blocks){
+      return [].fill('Z', 0, 5)
+    }
     return [
       blocks[0]+' End',
       blocks[1]+' Start',
@@ -295,44 +299,16 @@ class App extends Component {
     if(colDisplayed === 3) size = 4;
     return (
       <div className={this.state.hideCursor ? "main-container no-cursor" : "main-container"}>
-        {this.state.displayExceptions.header ?
-          <Header loaded={this.state.aspenLoaded} setDisplay={this.toggleDisplayException} exceptions={this.state.displayExceptions}/>
-          :
-          <div/>
-        }
+        <Header hidden={this.state.displayExceptions.header} loaded={this.state.aspenLoaded} setDisplay={this.toggleDisplayException} exceptions={this.state.displayExceptions}/>
         <div className="mainInfoWrapper">
-          {this.state.displayExceptions.pageTitle ?
-            <PageTitle dayNumber={this.state.dayNumber} asOf={this.state.asOf}/>
-            :
-            <div/>
-          }
-          {this.state.displayExceptions.schedule ?
-            <Schedule ref="scheduleChild" percents={this.percents} schedule={this.state.schedule}/>
-            :
-            <div/>
-          }
+          <PageTitle hidden={this.state.displayExceptions.pageTitle} dayNumber={this.state.dayNumber} asOf={this.state.asOf}/>
+          <Schedule hidden={this.state.displayExceptions.schedule} ref="scheduleChild" percents={this.percents} schedule={this.state.schedule}/>
           <Row>
-            {this.state.displayExceptions.dayTimer ?
-              <DayTimer ref="dayTimerChild" size={size} isHalfDay={false}/>
-              :
-              <div/>
-            }
-            {this.state.displayExceptions.blockTimer ?
-              <BlockTimer ref="blockTimerChild" classes={this.classes} percents={this.percents} refresh={this.refresh} schedule={this.state.schedule}  size={size}/>
-              :
-              <div/>
-            }
-            {this.state.displayExceptions.lunch ?
-              <Lunch ref="lunchChild" size={size}/>
-              :
-              <div/>
-            }
+              <DayTimer hidden={this.state.displayExceptions.dayTimer} ref="dayTimerChild" size={size} isHalfDay={false}/>
+              <BlockTimer hidden={this.state.displayExceptions.blockTimer} ref="blockTimerChild" classes={this.classes} percents={this.percents} refresh={this.refresh} schedule={this.state.schedule}  size={size}/>
+              <Lunch hidden={this.state.displayExceptions.lunch} ref="lunchChild" size={size}/>
           </Row>
-          {this.state.displayExceptions.announcements ?
-            <Announcements announcements={this.state.announcements} displayButtons={this.state.displayExceptions.announcementsButtons} cycleTime={8000}/>
-            :
-            <div/>
-          }
+            <Announcements hidden={this.state.displayExceptions.announcements} announcements={this.state.announcements} displayButtons={this.state.displayExceptions.announcementsButtons} cycleTime={8000}/>
         </div>
       </div>
     );

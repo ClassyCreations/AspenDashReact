@@ -46,11 +46,14 @@ export default class Lunch extends Component{
     //1: 12
     //2: 6
     return(
-      <Col sm={this.props.size}>
-        <Panel bsStyle="danger" header="Lunch Special" className="lunch-panel">
-          {this.state.special}
-        </Panel>
-      </Col>
+      this.props.hidden ?
+        <Col sm={this.props.size}>
+          <Panel bsStyle="danger" header="Lunch Special" className="lunch-panel">
+            {this.state.special}
+          </Panel>
+        </Col>
+        :
+        <div/>
     )
   }
 }

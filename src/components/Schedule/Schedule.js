@@ -180,12 +180,15 @@ export default class Schedule extends Component{
   render(){
     const barPercent = this.state.percent > 100 ? 100 : Math.round(this.state.percent);
     return(
-      <Panel header="Schedule" bsStyle="danger">
-        <div className="schedule-panel">
-          {this.state.blocks}
-        </div>
-        <ProgressBar active={barPercent < 100} striped bsStyle="danger" now={barPercent} label={`${barPercent}%`}/>
-      </Panel>
+      this.props.hidden ?
+        <Panel header="Schedule" bsStyle="danger">
+          <div className="schedule-panel">
+            {this.state.blocks}
+          </div>
+          <ProgressBar active={barPercent < 100} striped bsStyle="danger" now={barPercent} label={`${barPercent}%`}/>
+        </Panel>
+        :
+        <div/>
     )
   }
 }

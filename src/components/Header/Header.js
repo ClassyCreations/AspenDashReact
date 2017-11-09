@@ -26,28 +26,31 @@ class Header extends Component {
   render() {
     let except = this.props.exceptions;
     return (
-      <Navbar inverse collapseOnSelect className="header">
-        <Navbar.Header>
-          <Navbar.Brand>
-            <a href="/" className="header-m">{this.props.loaded ? 'M' : <span className="glyphicon glyphicon-refresh spinning"/>}</a>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <NavItem eventKey={1} onClick={() => this.handleSetDisplay()}>Melrose High School</NavItem>
-            <NavItem eventKey={2} href="/" disabled>Toggle Notifications</NavItem>
-            <NavDropdown eventKey={3} title="Display Settings" id="display-settings">
-              <MenuItem onClick={() => this.handleSetDisplay('pageTitle')}>Title{this.getCheckState(except.pageTitle)}</MenuItem>
-              <MenuItem onClick={() => this.handleSetDisplay('schedule')}>Schedule{this.getCheckState(except.schedule)}</MenuItem>
-              <MenuItem onClick={() => this.handleSetDisplay('dayTimer')}>Day Timer{this.getCheckState(except.dayTimer)}</MenuItem>
-              <MenuItem onClick={() => this.handleSetDisplay('blockTimer')}>Block Timer{this.getCheckState(except.blockTimer)}</MenuItem>
-              <MenuItem onClick={() => this.handleSetDisplay('lunch')}>Lunch{this.getCheckState(except.lunch)}</MenuItem>
-              <MenuItem onClick={() => this.handleSetDisplay('announcements')}>Announcements{this.getCheckState(except.announcements)}</MenuItem>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      this.props.hidden ?
+        <Navbar inverse collapseOnSelect className="header">
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="/" className="header-m">{this.props.loaded ? 'M' : <span className="glyphicon glyphicon-refresh spinning"/>}</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav>
+              <NavItem eventKey={1} onClick={() => this.handleSetDisplay()}>Melrose High School</NavItem>
+              <NavItem eventKey={2} href="/" disabled>Toggle Notifications</NavItem>
+              <NavDropdown eventKey={3} title="Display Settings" id="display-settings">
+                <MenuItem onClick={() => this.handleSetDisplay('pageTitle')}>Title{this.getCheckState(except.pageTitle)}</MenuItem>
+                <MenuItem onClick={() => this.handleSetDisplay('schedule')}>Schedule{this.getCheckState(except.schedule)}</MenuItem>
+                <MenuItem onClick={() => this.handleSetDisplay('dayTimer')}>Day Timer{this.getCheckState(except.dayTimer)}</MenuItem>
+                <MenuItem onClick={() => this.handleSetDisplay('blockTimer')}>Block Timer{this.getCheckState(except.blockTimer)}</MenuItem>
+                <MenuItem onClick={() => this.handleSetDisplay('lunch')}>Lunch{this.getCheckState(except.lunch)}</MenuItem>
+                <MenuItem onClick={() => this.handleSetDisplay('announcements')}>Announcements{this.getCheckState(except.announcements)}</MenuItem>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        :
+        <div/>
     );
   }
 }
