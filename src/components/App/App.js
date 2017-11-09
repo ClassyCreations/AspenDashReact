@@ -54,6 +54,9 @@ class App extends Component {
   ];
   tuesdayAdvisoryClasses = () => {
     const blocks = this.state.schedule;
+    if(!blocks){
+      return [].fill('Z', 0, 5)
+    }
     return [
       blocks[0]+' End',
       blocks[1]+' Start',
@@ -138,6 +141,9 @@ class App extends Component {
   ];
   thursdayAdvisoryClasses = () => {
     const blocks = this.state.schedule;
+    if(!blocks){
+      return [].fill('Z', 0, 5)
+    }
     return [
       blocks[0]+' End',
       blocks[1]+' Start',
