@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import request from 'request';
 import { Row } from 'react-bootstrap';
+import screenfull from 'screenfull';
 
 import Header from '../Header/Header';
 import PageTitle from '../Title/Title';
@@ -29,6 +30,7 @@ class App extends Component {
     this.hideCursor = this.hideCursor.bind(this);
     this.refresh = this.refresh.bind(this);
     this.addFocusListener = this.addFocusListener.bind(this);
+    this.fullScreen = this.fullScreen.bind(this);
 
     this.addFocusListener();
   }
@@ -275,6 +277,19 @@ class App extends Component {
     });
   }
 
+  fullScreen(){
+    if (screenfull.enabled){
+      screenfull.request();
+      screenfull.on("change", () => {
+        if(screenfull.isFullscreen){
+          this.setDisplayException("header", false);
+        }else{
+          this.setDisplayException("header", true);
+        }
+      })
+    }
+  }
+
   refresh(){
     this.getAspenInfo()
       .then(res => {
@@ -305,7 +320,7 @@ class App extends Component {
     if(colDisplayed === 3) size = 4;
     return (
       <div className={this.state.hideCursor ? "main-container no-cursor" : "main-container"}>
-        <Header hidden={this.state.displayExceptions.header} loaded={this.state.aspenLoaded} setDisplay={this.toggleDisplayException} exceptions={this.state.displayExceptions}/>
+        <Header hidden={this.state.displayExceptions.header} loaded={this.state.aspenLoaded} setDisplay={this.toggleDisplayException} exceptions={this.state.displayExceptions} handleFullScreen={this.fullScreen}/>
         <div className="mainInfoWrapper">
           <PageTitle hidden={this.state.displayExceptions.pageTitle} dayNumber={this.state.dayNumber} asOf={this.state.asOf}/>
           <Schedule hidden={this.state.displayExceptions.schedule} ref="scheduleChild" percents={this.percents} schedule={this.state.schedule}/>

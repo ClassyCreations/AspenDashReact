@@ -46,6 +46,7 @@ class Header extends Component {
                 <MenuItem onClick={() => this.handleSetDisplay('lunch')}>Lunch{this.getCheckState(except.lunch)}</MenuItem>
                 <MenuItem onClick={() => this.handleSetDisplay('announcements')}>Announcements{this.getCheckState(except.announcements)}</MenuItem>
               </NavDropdown>
+              <NavItem eventKey={2} href="/" onClick={this.props.handleFullScreen}>Full Screen</NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

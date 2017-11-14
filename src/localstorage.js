@@ -10,12 +10,21 @@ export const loadState = () => {
   }
 };
 
-export const saveState = (state) => {
+export const saveState = (appState) => {
+  let state = {...appState};
   try{
     //State is saved as a string so it has to be stringified
+    exclusions.forEach((item) => {
+      state[item] = true;
+    });
+    console.log("Saving state: ",state);
     const serializedState = JSON.stringify(state);
     localStorage.setItem('aspenDash', serializedState)
   }catch(err){
     return undefined;
   }
 };
+
+const exclusions = [
+  'header',
+];
