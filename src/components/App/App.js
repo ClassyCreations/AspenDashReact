@@ -275,7 +275,7 @@ class App extends Component {
           resolve(aspenInfo);
         }
       };
-      request.get('https://mhs-aspencheck-serve.herokuapp.com/api/v1/ma-melrose/aspen/schedule', (err, res, body) => {
+      request.get('https://aspencheck.herokuapp.com/api/v1/ma-melrose/aspen/schedule', (err, res, body) => {
         try{
           const res = JSON.parse(body);
           countRes({schedule: res.data, asOf: res.asOf});
@@ -283,7 +283,7 @@ class App extends Component {
           countRes({schedule: {asOf: new Date().getTime()/1000, day:0, classInSession: true, block:"Z", advisoryBlock: "Z",blockOfDay: 6, blockOrder: ["A","B","C","D","E","F"]}});
         }
       });
-      request.get('https://mhs-aspencheck-serve.herokuapp.com/api/v1/ma-melrose/announcements', (err, res, body) => {
+      request.get('https://aspencheck.herokuapp.com/api/v1/ma-melrose/announcements', (err, res, body) => {
         try{
           const res = JSON.parse(body);
           countRes({announcements: res.data});
