@@ -198,6 +198,9 @@ class App extends Component {
   componentDidMount(){
     this.getDisplayExceptions();
     this.hideCursor();
+    if(this.getParameterByName('fullscreen') === 'true'){
+      this.fullScreen();
+    }
   }
 
   getDisplayExceptions(){
@@ -241,10 +244,8 @@ class App extends Component {
     }
   }
 
-  hideCursor(){
-    if(this.getParameterByName('hideCursor') === 'true'){
-      this.setState({hideCursor: true});
-    }
+  hideCursor(bool){
+    this.setState({hideCursor: bool});
   }
 
   toggleDisplayException(id){
@@ -274,7 +275,7 @@ class App extends Component {
           resolve(aspenInfo);
         }
       };
-      request.get('http://localhost:8080/api/v1/ma-melrose/aspen/schedule', (err, res, body) => {
+      request.get('https://mhs-aspencheck-serve.herokuapp.com/api/v1/ma-melrose/aspen/schedule', (err, res, body) => {
         try{
           const res = JSON.parse(body);
           countRes({schedule: res.data, asOf: res.asOf});
@@ -282,7 +283,7 @@ class App extends Component {
           countRes({schedule: {asOf: new Date().getTime()/1000, day:0, classInSession: true, block:"Z", advisoryBlock: "Z",blockOfDay: 6, blockOrder: ["A","B","C","D","E","F"]}});
         }
       });
-      request.get('http://localhost:8080/api/v1/ma-melrose/announcements', (err, res, body) => {
+      request.get('https://mhs-aspencheck-serve.herokuapp.com/api/v1/ma-melrose/announcements', (err, res, body) => {
         try{
           const res = JSON.parse(body);
           countRes({announcements: res.data});
@@ -299,8 +300,10 @@ class App extends Component {
       screenfull.on("change", () => {
         if(screenfull.isFullscreen){
           this.setDisplayException("header", false);
+          this.hideCursor(true);
         }else{
           this.setDisplayException("header", true);
+          this.hideCursor(false);
         }
       })
     }
