@@ -21,7 +21,7 @@ class App extends Component {
     this.state = {aspenLoaded: false, schedule: null, currentBlock: null, dayNumber: null, asOf: 0, displayExceptions: {}, hideCursor: false};
     this.getAspenInfo()
       .then(res => {
-        this.setState({aspenLoaded: true, asOf: res.asOf, schedule: res.schedule.blockSchedule, currentBlock: res.schedule.block, dayNumber: res.schedule.day, announcements: res.announcements.hs});
+        this.setState({aspenLoaded: true, asOf: res.asOf, schedule: res.schedule.blockOrder, currentBlock: res.schedule.block, dayNumber: res.schedule.day, announcements: res.announcements});
       });
     this.getDisplayExceptions = this.getDisplayExceptions.bind(this);
     this.setDisplayException = this.setDisplayException.bind(this);
@@ -98,7 +98,6 @@ class App extends Component {
     100,               //Block6End
   ];
   regularDayClasses = () => {
-    console.log(this.state.schedule);
     const blocks = this.state.schedule;
     if(!blocks){
       return [].fill('Z', 0, 5)
@@ -266,12 +265,29 @@ class App extends Component {
 
   getAspenInfo(){
     return new Promise(resolve => {
-      request.get('https://mhs-aspencheck-serve.herokuapp.com/', (err, res, body) => {
+      let aspenInfo = {};
+      let resCounter = 0;
+      const countRes = (info) => {
+        aspenInfo = Object.assign(aspenInfo, info);
+        resCounter++;
+        if(resCounter > 1){
+          resolve(aspenInfo);
+        }
+      };
+      request.get('http://localhost:8080/api/v1/ma-melrose/aspen/schedule', (err, res, body) => {
         try{
           const res = JSON.parse(body);
-          resolve(res);
+          countRes({schedule: res.data, asOf: res.asOf});
         }catch(err){
-          resolve({asOf: new Date().getTime(), schedule: {blockSchedule: [], currentBlock: 'Z', day: 0}, announcements: {hs: []}});
+          countRes({schedule: {asOf: new Date().getTime()/1000, day:0, classInSession: true, block:"Z", advisoryBlock: "Z",blockOfDay: 6, blockOrder: ["A","B","C","D","E","F"]}});
+        }
+      });
+      request.get('http://localhost:8080/api/v1/ma-melrose/announcements', (err, res, body) => {
+        try{
+          const res = JSON.parse(body);
+          countRes({announcements: res.data});
+        }catch(err){
+          countRes({announcements: {hs: []}});
         }
       })
     });
@@ -293,7 +309,7 @@ class App extends Component {
   refresh(){
     this.getAspenInfo()
       .then(res => {
-        this.setState({aspenLoaded: true, asOf: res.asOf, schedule: res.schedule.blockSchedule, currentBlock: res.schedule.block, dayNumber: res.schedule.day, announcements: res.announcements.hs});
+        this.setState({aspenLoaded: true, asOf: res.asOf, schedule: res.schedule.blockOrder, currentBlock: res.schedule.block, dayNumber: res.schedule.day, announcements: res.announcements});
         if(typeof this.refs.scheduleChild !== 'undefined'){
           this.refs.scheduleChild.refresh();
         }
