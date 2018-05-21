@@ -25,19 +25,24 @@ export default class Lunch extends Component{
   }
 
   getLunchInfo(){
-    //TODO: Make this not stupid (Either save the nutrislice response and serve it ourselves or make some other way of this not being stupid)
-    request.get('https://melroseschools.nutrislice.com/menu/api/weeks/school/melrose/menu-type/lunch/'+new Date().getFullYear()+'/00/00/?format=json', (err, res, body) => {
+    const self = this;
+    function onCallback(body){
+      console.log(body);
       try{
-        body = JSON.parse(body);
         const item = body.days[new Date().getDay()].menu_items[1];
         if(typeof item !== 'undefined'){
-          this.setState({special: item.food.name, loaded: true});
+          self.setState({special: item.food.name, loaded: true});
         }else{
-          this.setState({special: 'No Lunch Served'});
+          self.setState({special: 'No Lunch Served'});
         }
       }catch(err){
-        this.setState({special: 'Error getting lunch'});
+        self.setState({special: 'Error getting lunch'});
       }
+    }
+
+    //TODO: Make this not stupid (Either save the nutrislice response and serve it ourselves or make some other way of this not being stupid)
+    request.get('https://melroseschools.nutrislice.com/menu/api/weeks/school/melrose/menu-type/lunch/'+new Date().getFullYear()+'/00/00/?format=json-p&callback=onCallback', (err, res, body) => {
+      eval(body);
     })
   }
 
